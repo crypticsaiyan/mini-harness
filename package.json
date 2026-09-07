@@ -1,0 +1,23 @@
+{
+  "name": "mini-harness",
+  "version": "1.0.0",
+  "description": "AI harness from scratch",
+  "license": "MIT",
+  "author": "Rahul Joshi",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun src/provider/complete.ts",
+    "watch": "bun --watch src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@openrouter/sdk": "^1.2.66",
+    "dotenv": "^17.4.2"
+  }
+}
