@@ -8,12 +8,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun src/provider/complete.ts",
+    "dev": "bun src/provider/index.ts",
     "watch": "bun --watch src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
+    "prettier": "3.9.6",
     "typescript": "^7.0.2"
   },
   "dependencies": {
