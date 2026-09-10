@@ -41,11 +41,7 @@ function normalizeStats(usage: ChatUsage | undefined): Statistics {
       totalTokens: usage.totalTokens,
     };
   }
-  return {
-    promptTokens: 0,
-    completionTokens: 0,
-    totalTokens: 0,
-  };
+  throw new Error("Error fetching stats");
 }
 
 function normalizeToolCalls(raw: ChatToolCall[] | undefined): ToolCall[] {
@@ -54,6 +50,7 @@ function normalizeToolCalls(raw: ChatToolCall[] | undefined): ToolCall[] {
     for (const tool of raw) {
       result.push({
         toolId: tool.id,
+        name: tool.function.name,
         arguments: tool.function.arguments,
       });
     }

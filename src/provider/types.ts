@@ -5,6 +5,7 @@
 
 export type ToolCall = {
   toolId: string;
+  name: string;
   arguments: string;
 };
 
@@ -27,11 +28,6 @@ export type ProviderResponse = {
   stats: Statistics;
 };
 
-export type ToolCallResult = {
-  toolId: string;
-  response: string;
-};
-
 export type UserMessage = {
   type: "user";
   content: string;
@@ -51,7 +47,8 @@ export type AssistantMessage = {
 
 export type ToolMessage = {
   type: "tool";
-  toolCallResult: ToolCallResult[];
+  toolCallId: string;
+  content: string;
 };
 
 export type AgentMessage =
