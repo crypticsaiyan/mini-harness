@@ -10,11 +10,7 @@ export type ToolCall = {
 };
 
 export type FinishReason =
-  | "tool_calls"
-  | "stop"
-  | "length"
-  | "content_filter"
-  | "error";
+  "tool_calls" | "stop" | "length" | "content_filter" | "error";
 
 export type Statistics = {
   promptTokens: number;
@@ -41,7 +37,7 @@ export type SystemMessage = {
 // previous provider response
 export type AssistantMessage = {
   type: "assistant";
-  content: string;
+  content: string | null;
   toolCalls?: ToolCall[];
 };
 
@@ -52,7 +48,10 @@ export type ToolMessage = {
 };
 
 export type AgentMessage =
-  | UserMessage
-  | SystemMessage
-  | AssistantMessage
-  | ToolMessage;
+  UserMessage | SystemMessage | AssistantMessage | ToolMessage;
+
+export type ToolSpec = {
+  name: string;
+  description: string;
+  parameters: object;
+};
