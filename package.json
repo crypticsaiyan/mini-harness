@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@openrouter/sdk": "^1.2.66",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "zod": "^4.6.4"
   }
 }
