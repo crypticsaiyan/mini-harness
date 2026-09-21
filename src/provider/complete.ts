@@ -1,6 +1,6 @@
-import { client, MODEL } from "./client.js";
-import { normalize, toSdkMsg, toSdkTool } from "./normalize.js";
-import type { AgentMessage, ProviderResponse, ToolSpec } from "./types.js";
+import { client, MODEL } from "./client";
+import { normalize, toSdkMsg, toSdkTool } from "./normalize";
+import type { AgentMessage, ProviderResponse, ToolSpec } from "./types";
 
 export async function complete(
   messages: AgentMessage[],

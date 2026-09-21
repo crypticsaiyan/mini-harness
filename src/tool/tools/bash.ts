@@ -1,4 +1,4 @@
-import type { Tool } from "../types.js";
+import type { Tool } from "../types";
 import { promisify } from "node:util";
 import { exec } from "node:child_process";
 import z from "zod";

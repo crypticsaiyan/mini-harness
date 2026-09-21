@@ -17,7 +17,7 @@ import type {
   Statistics,
   ToolCall,
   ToolSpec,
-} from "./types.js";
+} from "./types";
 
 // as ChatFinishReasonEnum is an OpenEnum, it can consider unwanted values
 function normalizeFinishReason(raw: string | null): FinishReason {
@@ -53,7 +53,7 @@ function normalizeToolCalls(raw: ChatToolCall[] | undefined): ToolCall[] {
   if (raw) {
     for (const tool of raw) {
       result.push({
-        toolId: tool.id,
+        toolCallId: tool.id,
         name: tool.function.name,
         arguments: tool.function.arguments,
       });
@@ -100,7 +100,7 @@ export function toSdkMsg(msg: AgentMessage): ChatMessages {
         role: "assistant",
         content: msg.content,
         toolCalls: msg.toolCalls?.map((tc) => ({
-          id: tc.toolId,
+          id: tc.toolCallId,
           type: "function",
           function: {
             name: tc.name,

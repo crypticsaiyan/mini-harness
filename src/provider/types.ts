@@ -4,7 +4,7 @@
 // 3) Tool calls requested by the provider
 
 export type ToolCall = {
-  toolId: string;
+  toolCallId: string;
   name: string;
   arguments: string;
 };

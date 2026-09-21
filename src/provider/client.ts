@@ -15,4 +15,4 @@ export const client = new OpenRouter({
   apiKey,
 });
 
-export const MODEL = "nvidia/nemotron-3-ultra-550b-a55b:free";
+export const MODEL = "openrouter/free";

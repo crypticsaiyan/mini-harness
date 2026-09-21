@@ -1,1 +1,1 @@
-export { generateToolsArray, runTool } from "./registry.js";
+export { generateToolsArray, runTool } from "./registry";

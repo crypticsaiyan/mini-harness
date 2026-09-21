@@ -1,3 +1,9 @@
-export type { ToolSpec, AgentMessage } from "./types.js";
+export type {
+  ToolSpec,
+  AgentMessage,
+  ProviderResponse,
+  ToolCall,
+  ToolMessage,
+} from "./types";
 
-export { complete } from "./complete.js";
+export { complete } from "./complete";

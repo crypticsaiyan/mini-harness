@@ -1,6 +1,6 @@
-import type { ToolSpec } from "../provider/index.js";
-import { bashTool } from "./tools/bash.js";
-import type { Tool } from "./types.js";
+import type { ToolSpec } from "../provider";
+import { bashTool } from "./tools/bash";
+import type { Tool } from "./types";
 import z from "zod";
 
 export const registry: Record<string, Tool<any, unknown>> = {
