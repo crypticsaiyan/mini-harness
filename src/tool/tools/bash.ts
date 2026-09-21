@@ -12,10 +12,10 @@ export const bashTool: Tool<
   parameters: z.object({
     command: z.string().describe("command to execute in bash"),
   }),
-  execute: async (args: { command: string }) => {
+  execute: async ({ command }) => {
     try {
       const execAsync = promisify(exec);
-      return await execAsync(args.command);
+      return await execAsync(command);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Bash execution failed: ${error.message}`);

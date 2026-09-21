@@ -10,8 +10,7 @@ const messages: AgentMessage[] = [
   },
   {
     type: "user",
-    content:
-      "List the files in the current directory. Also list the files present in each folder",
+    content: "what is the content of package.json?",
   },
 ];
 
@@ -21,7 +20,6 @@ const result = await runLoop({
   config: { maxIterations: 5 },
 });
 
-console.log(JSON.stringify(result, null, 2));
 console.log(
   `\nstopReason: ${result.stopReason}, iterations: ${result.iterations}`,
 );
