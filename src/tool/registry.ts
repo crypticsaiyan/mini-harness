@@ -1,22 +1,21 @@
 import type { ToolSpec } from "../provider";
 import { bashTool } from "./tools/bash";
+import { fileRead } from "./tools/read_file";
 import type { Tool } from "./types";
 import z from "zod";
 
-export const registry: Record<string, Tool<any, unknown>> = {
-  bash: bashTool,
-};
+const tools: Tool<any, unknown>[] = [bashTool, fileRead];
+
+export const registry: Record<string, Tool<any, unknown>> = Object.fromEntries(
+  tools.map((tool) => [tool.name, tool]),
+);
 
 export function generateToolsArray(): ToolSpec[] {
-  let availableTools: ToolSpec[] = [];
-  Object.values(registry).forEach((tool) => {
-    availableTools.push({
-      name: tool.name,
-      description: tool.description,
-      parameters: z.toJSONSchema(tool.parameters),
-    });
-  });
-  return availableTools;
+  return tools.map((tool) => ({
+    name: tool.name,
+    description: tool.description,
+    parameters: z.toJSONSchema(tool.parameters),
+  }));
 }
 
 export async function runTool(name: string, args: string): Promise<string> {
