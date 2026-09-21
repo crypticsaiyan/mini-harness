@@ -1,10 +1,12 @@
 import type { ToolSpec } from "../provider";
 import { bashTool } from "./tools/bash";
 import { fileRead } from "./tools/read_file";
+import { strReplace } from "./tools/str_replace";
+import { fileWrite } from "./tools/write_file";
 import type { Tool } from "./types";
 import z from "zod";
 
-const tools: Tool<any, unknown>[] = [bashTool, fileRead];
+const tools: Tool<any, unknown>[] = [bashTool, fileRead, strReplace, fileWrite];
 
 export const registry: Record<string, Tool<any, unknown>> = Object.fromEntries(
   tools.map((tool) => [tool.name, tool]),

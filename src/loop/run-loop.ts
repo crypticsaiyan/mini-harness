@@ -10,14 +10,15 @@ const messages: AgentMessage[] = [
   },
   {
     type: "user",
-    content: "what is the content of package.json?",
+    content:
+      "create a new folder named test_run and write a file to print hello world in c.",
   },
 ];
 
 const result = await runLoop({
   messages,
   complete,
-  config: { maxIterations: 5 },
+  config: { maxIterations: 10 },
 });
 
 console.log(

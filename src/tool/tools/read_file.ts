@@ -12,7 +12,7 @@ export const fileRead: Tool<
   },
   { content: string; totalLines: number; truncated: boolean }
 > = {
-  name: "readFile",
+  name: "read_file",
   description:
     "Read a file's content, optionally starting at a line offset with a limit",
   parameters: z.object({

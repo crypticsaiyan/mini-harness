@@ -18,7 +18,8 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
     }
 
     const completion = await input.complete(messages, generateToolsArray());
-    console.log(completion.message);
+    // console.log(messages);
+    console.dir(messages, { depth: null });
     messages.push(completion.message);
 
     const finishReason = completion.finishReason;
@@ -31,6 +32,12 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
         for (const result of toolCallResults) {
           messages.push(result);
         }
+      } else {
+        return {
+          messages,
+          stopReason: "error",
+          iterations,
+        };
       }
     } else if (finishReason === "error") {
       return {
