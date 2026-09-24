@@ -1,13 +1,13 @@
 import type { AgentMessage } from "../provider";
-import type { Session } from "../session";
 import { generateToolsArray } from "../tool";
+import type { ToolContext } from "../tool/types";
 import { dispatchTool } from "./dispatch";
 import type { LoopInput, LoopOutput } from "./types";
 
 export async function runLoop(input: LoopInput): Promise<LoopOutput> {
   let iterations = 0;
   const messages: Array<AgentMessage> = [...input.messages];
-  const session: Session = input.session;
+  const ctx: ToolContext = input.ctx;
 
   while (true) {
     console.log("Running loop ", iterations);
@@ -30,7 +30,7 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
       if (completion.message.toolCalls) {
         const toolCallResults = await dispatchTool(
           completion.message.toolCalls,
-          session,
+          ctx,
         );
         for (const result of toolCallResults) {
           messages.push(result);

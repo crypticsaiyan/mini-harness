@@ -27,7 +27,10 @@ const result = await runLoop({
   messages,
   complete,
   config: { maxIterations: 10 },
-  session,
+  ctx: {
+    session,
+    asker: async () => "allow-once",
+  },
 });
 
 console.log(

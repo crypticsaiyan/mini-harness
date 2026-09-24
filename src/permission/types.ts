@@ -3,7 +3,7 @@ export type PermKey = {
   value: string;
 };
 
-export type PermDecision = "allowed" | "blocked" | "ask" | "always-ask";
+export type PermDecision = "allowed" | "ask" | "always-ask";
 
 export type PermSession = {
   allowList: RegExp[];
@@ -11,3 +11,10 @@ export type PermSession = {
 };
 
 export type Allowed = { ok: true } | { ok: false; reason: string };
+
+export type UserDecision = "allow-once" | "allow-always" | "deny";
+
+export type Asker = (
+  key: PermKey,
+  decision: "ask" | "always-ask",
+) => Promise<UserDecision>;

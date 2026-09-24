@@ -1,12 +1,11 @@
 import { checkPermission } from "../permission/check";
 import type { Allowed } from "../permission/types";
 import type { ToolSpec } from "../provider";
-import type { Session } from "../session";
 import { bashTool } from "./tools/bash";
 import { fileRead } from "./tools/read_file";
 import { strReplace } from "./tools/str_replace";
 import { fileWrite } from "./tools/write_file";
-import type { Tool } from "./types";
+import type { Tool, ToolContext } from "./types";
 import z from "zod";
 
 const tools: Tool<any, unknown>[] = [bashTool, fileRead, strReplace, fileWrite];
@@ -26,7 +25,7 @@ export function generateToolsArray(): ToolSpec[] {
 export async function runTool(
   name: string,
   args: string,
-  session: Session,
+  ctx: ToolContext,
 ): Promise<string> {
   const tool = registry[name];
 
@@ -49,7 +48,8 @@ export async function runTool(
   const allowedToRun: Allowed = await checkPermission(
     tool,
     parsedArgs.data,
-    session.permissions,
+    ctx.session.permissions,
+    ctx.asker,
   );
 
   if (!allowedToRun.ok)

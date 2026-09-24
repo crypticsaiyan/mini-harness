@@ -1,5 +1,5 @@
 import type { AgentMessage, ProviderResponse, ToolSpec } from "../provider";
-import type { Session } from "../session";
+import type { ToolContext } from "../tool/types";
 
 export type CompleteFunc = (
   // generates the next completion
@@ -19,7 +19,7 @@ export interface LoopInput {
   messages: AgentMessage[];
   complete: CompleteFunc;
   config: LoopConfig;
-  session: Session;
+  ctx: ToolContext;
 }
 
 export type StopReason =
