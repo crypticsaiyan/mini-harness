@@ -1,6 +1,7 @@
 import type { AgentMessage } from "../provider";
 import { complete } from "../provider";
 import { runLoop } from "./loop";
+import type { Session } from "../session";
 
 const messages: AgentMessage[] = [
   {
@@ -15,10 +16,18 @@ const messages: AgentMessage[] = [
   },
 ];
 
+const session: Session = {
+  permissions: {
+    allowList: [],
+    projectRoot: process.cwd(),
+  },
+};
+
 const result = await runLoop({
   messages,
   complete,
   config: { maxIterations: 10 },
+  session,
 });
 
 console.log(

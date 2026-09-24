@@ -1,6 +1,7 @@
 import { checkPermission } from "../permission/check";
-import type { Allowed, PermSession } from "../permission/types";
+import type { Allowed } from "../permission/types";
 import type { ToolSpec } from "../provider";
+import type { Session } from "../session";
 import { bashTool } from "./tools/bash";
 import { fileRead } from "./tools/read_file";
 import { strReplace } from "./tools/str_replace";
@@ -22,7 +23,11 @@ export function generateToolsArray(): ToolSpec[] {
   }));
 }
 
-export async function runTool(name: string, args: string): Promise<string> {
+export async function runTool(
+  name: string,
+  args: string,
+  session: Session,
+): Promise<string> {
   const tool = registry[name];
 
   if (!tool) {
@@ -41,15 +46,10 @@ export async function runTool(name: string, args: string): Promise<string> {
     return `Error: invalid arguments for tool "${name}": ${parsedArgs.error.message}`;
   }
 
-  const testSession: PermSession = {
-    allowList: [],
-    projectRoot: "./",
-  };
-
   const allowedToRun: Allowed = await checkPermission(
     tool,
     parsedArgs.data,
-    testSession,
+    session.permissions,
   );
 
   if (!allowedToRun.ok)
