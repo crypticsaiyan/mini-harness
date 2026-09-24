@@ -12,7 +12,8 @@ export type PermSession = {
 
 export type Allowed = { ok: true } | { ok: false; reason: string };
 
-export type UserDecision = "allow-once" | "allow-always" | "deny";
+export type UserDecision =
+  "allow-once" | "allow-always-exact" | "allow-always-prefix" | "deny";
 
 export type Asker = (
   key: PermKey,

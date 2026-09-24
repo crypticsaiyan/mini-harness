@@ -8,6 +8,10 @@ import type {
   UserDecision,
 } from "./types";
 
+function escapeRegex(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export async function checkPermission(
   tool: Tool<any, unknown>,
   args: any,
@@ -29,13 +33,25 @@ export async function checkPermission(
   }
   if (decision === "allowed") return { ok: true };
   const userDecision: UserDecision = await asker(key, decision);
-  if (userDecision === "deny")
+  if (userDecision === "deny") {
     return {
       ok: false,
       reason: "User denied tool use with the provided arguments",
     };
-  if (userDecision === "allow-always") {
-    // TODO: add command to session allowList
+  }
+
+  // avoid adding to session on always-ask toolCalls
+  if (decision === "ask") {
+    const trimmed = key.value.trim();
+    if (userDecision === "allow-always-exact") {
+      // add exact string to allowList
+      session.allowList.push(new RegExp(`^${escapeRegex(trimmed)}$`));
+    } else if (userDecision === "allow-always-prefix") {
+      // add prefix * to allowList regex
+      const base = trimmed.split(/\s+/)[0];
+      if (base)
+        session.allowList.push(new RegExp(`^${escapeRegex(base)}(\\s.*)?$`));
+    }
   }
   return { ok: true };
 }
