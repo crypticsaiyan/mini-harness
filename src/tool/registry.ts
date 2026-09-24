@@ -1,3 +1,5 @@
+import { checkPermission } from "../permission/check";
+import type { Allowed, PermSession } from "../permission/types";
 import type { ToolSpec } from "../provider";
 import { bashTool } from "./tools/bash";
 import { fileRead } from "./tools/read_file";
@@ -38,6 +40,20 @@ export async function runTool(name: string, args: string): Promise<string> {
   if (!parsedArgs.success) {
     return `Error: invalid arguments for tool "${name}": ${parsedArgs.error.message}`;
   }
+
+  const testSession: PermSession = {
+    allowList: [],
+    projectRoot: "./",
+  };
+
+  const allowedToRun: Allowed = await checkPermission(
+    tool,
+    parsedArgs.data,
+    testSession,
+  );
+
+  if (!allowedToRun.ok)
+    return `Not allowed to run tool: ${name}, reason: ${allowedToRun.reason}`;
 
   try {
     const run = await tool.execute(parsedArgs.data);

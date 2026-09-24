@@ -14,6 +14,7 @@ export const fileWrite: Tool<
     path: z.string().describe("path of the new file"),
     content: z.string().describe("content of the new file"),
   }),
+  getPermissionKey: ({ path }) => ({ kind: "command", value: path }),
   execute: async ({ path, content }) => {
     try {
       await mkdir(dirname(path), { recursive: true });

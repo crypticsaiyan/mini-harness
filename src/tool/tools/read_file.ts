@@ -26,6 +26,8 @@ export const fileRead: Tool<
       .describe(`number of lines to show (default ${DEFAULT_LIMIT})`)
       .optional(),
   }),
+
+  getPermissionKey: () => undefined,
   execute: async ({ path, offset = 0, limit = DEFAULT_LIMIT }) => {
     try {
       const content = await readFile(path, "utf-8");

@@ -12,6 +12,7 @@ export const bashTool: Tool<
   parameters: z.object({
     command: z.string().describe("command to execute in bash"),
   }),
+  getPermissionKey: ({ command }) => ({ kind: "command", value: command }),
   execute: async ({ command }) => {
     try {
       const execAsync = promisify(exec);
