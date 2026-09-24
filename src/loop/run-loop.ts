@@ -11,8 +11,7 @@ const messages: AgentMessage[] = [
   },
   {
     type: "user",
-    content:
-      "create a new folder named test_run and write a file to print hello world in c.",
+    content: "run sleep 30 command",
   },
 ];
 
@@ -23,13 +22,22 @@ const session: Session = {
   },
 };
 
+const controller = new AbortController();
+
+process.on("SIGINT", () => {
+  if (controller.signal.aborted) process.exit(130);
+  controller.abort();
+  console.log("band kro");
+});
+
 const result = await runLoop({
   messages,
   complete,
-  config: { maxIterations: 10 },
+  config: { maxIterations: 10, maxTokens: 10000 },
   ctx: {
     session,
     asker: async () => "allow-once",
+    signal: controller.signal,
   },
 });
 

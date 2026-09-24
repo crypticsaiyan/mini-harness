@@ -5,15 +5,19 @@ import type { AgentMessage, ProviderResponse, ToolSpec } from "./types";
 export async function complete(
   messages: AgentMessage[],
   tools: ToolSpec[] = [],
+  signal: AbortSignal,
 ): Promise<ProviderResponse> {
-  const completion = await client.chat.send({
-    chatRequest: {
-      model: MODEL,
-      messages: messages.map(toSdkMsg),
-      tools: tools.map(toSdkTool),
-      stream: false,
+  const completion = await client.chat.send(
+    {
+      chatRequest: {
+        model: MODEL,
+        messages: messages.map(toSdkMsg),
+        tools: tools.map(toSdkTool),
+        stream: false,
+      },
     },
-  });
+    { fetchOptions: { signal } },
+  );
 
   if (completion instanceof ReadableStream) {
     throw new Error("Expected a non-streaming response");

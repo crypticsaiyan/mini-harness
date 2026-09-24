@@ -56,7 +56,7 @@ export async function runTool(
     return `Not allowed to run tool: ${name}, reason: ${allowedToRun.reason}`;
 
   try {
-    const run = await tool.execute(parsedArgs.data);
+    const run = await tool.execute(parsedArgs.data, ctx.signal);
     return JSON.stringify(run);
   } catch (error) {
     const message = error instanceof Error ? error.message : error;

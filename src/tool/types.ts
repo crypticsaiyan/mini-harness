@@ -12,10 +12,14 @@ export type Tool<
   getPermissionKey: (
     args: z.infer<z.ZodObject<TParams>>,
   ) => PermKey | undefined;
-  execute: (args: z.infer<z.ZodObject<TParams>>) => Promise<TResult>;
+  execute: (
+    args: z.infer<z.ZodObject<TParams>>,
+    signal: AbortSignal,
+  ) => Promise<TResult>;
 };
 
 export type ToolContext = {
   session: Session;
   asker: Asker;
+  signal: AbortSignal;
 };

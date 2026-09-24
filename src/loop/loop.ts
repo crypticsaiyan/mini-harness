@@ -6,10 +6,18 @@ import type { LoopInput, LoopOutput } from "./types";
 
 export async function runLoop(input: LoopInput): Promise<LoopOutput> {
   let iterations = 0;
+  let tokensUsed = 0;
   const messages: Array<AgentMessage> = [...input.messages];
   const ctx: ToolContext = input.ctx;
 
   while (true) {
+    if (ctx.signal.aborted) {
+      return {
+        messages,
+        stopReason: "interrupted",
+        iterations,
+      };
+    }
     console.log("Running loop ", iterations);
     if (iterations >= input.config.maxIterations) {
       return {
@@ -19,7 +27,21 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
       };
     }
 
-    const completion = await input.complete(messages, generateToolsArray());
+    let completion;
+    try {
+      completion = await input.complete(
+        messages,
+        generateToolsArray(),
+        ctx.signal,
+      );
+    } catch (error) {
+      if (ctx.signal.aborted)
+        return { messages, stopReason: "interrupted", iterations };
+      throw error;
+    }
+
+    tokensUsed += completion.stats.totalTokens;
+
     // console.log(messages);
     console.dir(messages, { depth: null });
     messages.push(completion.message);
@@ -42,28 +64,22 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
           iterations,
         };
       }
-    } else if (finishReason === "error") {
+    } else if (
+      finishReason === "error" ||
+      finishReason === "stop" ||
+      finishReason === "length" ||
+      finishReason === "content_filter"
+    ) {
       return {
         messages,
-        stopReason: "error",
+        stopReason: finishReason,
         iterations,
       };
-    } else if (finishReason === "stop") {
+    }
+    if (tokensUsed > input.config.maxTokens) {
       return {
         messages,
-        stopReason: "completed",
-        iterations,
-      };
-    } else if (finishReason === "length") {
-      return {
-        messages,
-        stopReason: "length",
-        iterations,
-      };
-    } else if (finishReason === "content_filter") {
-      return {
-        messages,
-        stopReason: "content_filter",
+        stopReason: "max_tokens",
         iterations,
       };
     }

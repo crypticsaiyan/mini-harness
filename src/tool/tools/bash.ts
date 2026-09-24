@@ -13,10 +13,10 @@ export const bashTool: Tool<
     command: z.string().describe("command to execute in bash"),
   }),
   getPermissionKey: ({ command }) => ({ kind: "command", value: command }),
-  execute: async ({ command }) => {
+  execute: async ({ command }, signal) => {
     try {
       const execAsync = promisify(exec);
-      return await execAsync(command);
+      return await execAsync(command, { signal });
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Bash execution failed: ${error.message}`);

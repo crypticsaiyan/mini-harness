@@ -10,6 +10,14 @@ export async function dispatchTool(
 ): Promise<ToolMessage[]> {
   const toolResponse: Array<ToolMessage> = [];
   for (const tool of toolCalls) {
+    if (ctx.signal.aborted) {
+      toolResponse.push({
+        type: "tool",
+        toolCallId: tool.toolCallId,
+        content: "Error: cancelled by user",
+      });
+      continue;
+    }
     const content = await runTool(tool.name, tool.arguments, ctx);
     toolResponse.push({
       type: "tool",
