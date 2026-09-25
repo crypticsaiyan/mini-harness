@@ -14,6 +14,7 @@ export type CompleteFunc = (
 export interface LoopConfig {
   maxIterations: number;
   maxTokens: number;
+  contextWindow: number; // depends on the model (TODO: model mapping)
 }
 
 // loop input format
@@ -38,4 +39,5 @@ export interface LoopOutput {
   messages: AgentMessage[];
   stopReason: StopReason;
   iterations: number;
+  lastPromptTokens: number;
 }

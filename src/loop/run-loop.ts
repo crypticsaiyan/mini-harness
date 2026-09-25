@@ -33,7 +33,7 @@ process.on("SIGINT", () => {
 const result = await runLoop({
   messages,
   complete,
-  config: { maxIterations: 10, maxTokens: 10000 },
+  config: { maxIterations: 10, maxTokens: 10000, contextWindow: 4000 },
   ctx: {
     session,
     asker: async () => "allow-once",

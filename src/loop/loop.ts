@@ -9,6 +9,7 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
   let tokensUsed = 0;
   const messages: Array<AgentMessage> = [...input.messages];
   const ctx: ToolContext = input.ctx;
+  let lastPromptTokens = 0;
 
   while (true) {
     if (ctx.signal.aborted) {
@@ -16,6 +17,7 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
         messages,
         stopReason: "interrupted",
         iterations,
+        lastPromptTokens,
       };
     }
     console.log("Running loop ", iterations);
@@ -24,6 +26,7 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
         messages,
         stopReason: "max_iterations",
         iterations,
+        lastPromptTokens,
       };
     }
 
@@ -36,14 +39,24 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
       );
     } catch (error) {
       if (ctx.signal.aborted)
-        return { messages, stopReason: "interrupted", iterations };
+        return {
+          messages,
+          stopReason: "interrupted",
+          iterations,
+          lastPromptTokens,
+        };
       throw error;
     }
 
     tokensUsed += completion.stats.totalTokens;
+    lastPromptTokens = completion.stats.promptTokens;
 
     // console.log(messages);
     console.dir(messages, { depth: null });
+    console.log(
+      "Context %: ",
+      (lastPromptTokens / input.config.contextWindow) * 100,
+    );
     messages.push(completion.message);
 
     const finishReason = completion.finishReason;
@@ -62,6 +75,7 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
           messages,
           stopReason: "error",
           iterations,
+          lastPromptTokens,
         };
       }
     } else if (
@@ -74,6 +88,7 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
         messages,
         stopReason: finishReason,
         iterations,
+        lastPromptTokens,
       };
     }
     if (tokensUsed > input.config.maxTokens) {
@@ -81,6 +96,7 @@ export async function runLoop(input: LoopInput): Promise<LoopOutput> {
         messages,
         stopReason: "max_tokens",
         iterations,
+        lastPromptTokens,
       };
     }
     iterations++;

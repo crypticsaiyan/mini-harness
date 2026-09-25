@@ -13,8 +13,8 @@ export type FinishReason =
   "tool_calls" | "stop" | "length" | "content_filter" | "error";
 
 export type Statistics = {
-  promptTokens: number;
-  completionTokens: number;
+  promptTokens: number; // input tokens (sent by messages array)
+  completionTokens: number; // output tokens: what model generated (assistant text + tool call tokens)
   totalTokens: number;
 };
 
