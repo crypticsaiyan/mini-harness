@@ -11,7 +11,7 @@ const messages: AgentMessage[] = [
   },
   {
     type: "user",
-    content: "run sleep 30 command",
+    content: "run seq 1 5000. I need the first 1000 values",
   },
 ];
 
@@ -38,9 +38,8 @@ const result = await runLoop({
     session,
     asker: async () => "allow-once",
     signal: controller.signal,
+    maxOutputChars: 20000,
   },
 });
 
-console.log(
-  `\nstopReason: ${result.stopReason}, iterations: ${result.iterations}`,
-);
+console.log(result);

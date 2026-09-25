@@ -5,6 +5,7 @@ import { bashTool } from "./tools/bash";
 import { fileRead } from "./tools/read_file";
 import { strReplace } from "./tools/str_replace";
 import { fileWrite } from "./tools/write_file";
+import { truncateStrings } from "./truncate";
 import type { Tool, ToolContext } from "./types";
 import z from "zod";
 
@@ -57,9 +58,12 @@ export async function runTool(
 
   try {
     const run = await tool.execute(parsedArgs.data, ctx.signal);
-    return JSON.stringify(run);
+    return JSON.stringify(truncateStrings(run, ctx.maxOutputChars));
   } catch (error) {
     const message = error instanceof Error ? error.message : error;
-    return `Error: tool "${name}" failed: ${message}`;
+    return truncateStrings(
+      `Error: tool "${name}" failed: ${message}`,
+      ctx.maxOutputChars,
+    ) as string;
   }
 }

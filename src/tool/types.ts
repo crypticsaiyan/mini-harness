@@ -22,4 +22,5 @@ export type ToolContext = {
   session: Session;
   asker: Asker;
   signal: AbortSignal;
+  maxOutputChars: number;
 };
